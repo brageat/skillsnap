@@ -9,10 +9,13 @@
 - 🌙 **Dark mode** and a clean settings menu. Your settings are saved.
 - 🖱️ **Keyboard only.** It never moves your mouse.
 
-## Install
-1. Install **[AutoHotkey v2](https://www.autohotkey.com/)**.
-2. Download this repo (green **Code** button → **Download ZIP**) and unzip it.
-3. Double-click **`SkillSnap.ahk`**.
+## Download
+### ⬇️ [Download the latest release](https://github.com/brageat/skillsnap/releases/latest)
+
+- **`SkillSnap.exe`** (easiest): just double-click it. Nothing else to install.
+- **`SkillSnap.ahk`**: if you already have [AutoHotkey v2](https://www.autohotkey.com/), download this and double-click it.
+
+> Windows or your antivirus may warn about `SkillSnap.exe`, because programs built with AutoHotkey are often flagged by mistake. If you'd rather not run an exe, use `SkillSnap.ahk`: it's the same code, and you can read it yourself.
 
 ## Use
 1. Run Roblox in **windowed or borderless fullscreen**.
