@@ -12,10 +12,11 @@
 ## Download
 ### ⬇️ [Download the latest release](https://github.com/brageat/skillsnap/releases/latest)
 
-- **`SkillSnap.exe`** (easiest): just double-click it. Nothing else to install.
-- **`SkillSnap.ahk`**: if you already have [AutoHotkey v2](https://www.autohotkey.com/), download this and double-click it.
+1. Install **[AutoHotkey v2](https://www.autohotkey.com/)**, the free, official program that runs the script.
+2. Download **`SkillSnap.ahk`** from the release.
+3. Double-click it.
 
-> Windows or your antivirus may warn about `SkillSnap.exe`, because programs built with AutoHotkey are often flagged by mistake. If you'd rather not run an exe, use `SkillSnap.ahk`: it's the same code, and you can read it yourself.
+> No exe to trust: `SkillSnap.ahk` is a plain text file, so you can open it in Notepad and read exactly what it does.
 
 ## Use
 1. Run Roblox in **windowed or borderless fullscreen**.
