@@ -4,6 +4,9 @@
 ; finds the yellow ring on screen and presses Space
 ; right as the shrinking red ring reaches the yellow zone.
 
+Version  := "1.1.0"
+RepoUrl  := "https://github.com/brageat/skillsnap"
+
 CoordMode "Pixel", "Screen"
 SetKeyDelay -1
 ProcessSetPriority "High"
@@ -72,6 +75,8 @@ ResetBtn.OnEvent("Click", ResetStats)
 
 G.SetFont("s8 cGray")
 NoteTxt := G.AddText("xs w260", "Run Roblox windowed / borderless fullscreen.")
+VersionLink := G.AddLink("xs w260", "v" Version " · Checking for updates...")
+VersionLink.OnEvent("Click", (*) => Run(RepoUrl "/releases/latest"))
 G.SetFont("s10 cDefault")
 
 if OnTop
@@ -126,6 +131,46 @@ ResetStats(*) {
     UpdateHud()
 }
 
+; ---------- update check ----------
+SetTimer CheckForUpdate, -1500           ; after the menu has appeared
+
+CheckForUpdate() {
+    try {
+        req := ComObject("WinHttp.WinHttpRequest.5.1")
+        req.SetTimeouts(3000, 3000, 3000, 3000)
+        req.Open("GET", "https://api.github.com/repos/brageat/skillsnap/releases/latest", false)
+        req.SetRequestHeader("User-Agent", "SkillSnap")
+        req.Send()
+        if (req.Status != 200 || !RegExMatch(req.ResponseText, '"tag_name"\s*:\s*"v?([\d.]+)"', &m))
+            throw Error("bad response")
+        latest := m[1]
+    } catch {
+        VersionLink.Text := "v" Version " · Couldn't check for updates (<a>open page</a>)"
+        return
+    }
+    if (CompareVersions(latest, Version) <= 0) {
+        VersionLink.Text := "v" Version " · Up to date"
+        return
+    }
+    VersionLink.Text := "v" Version " · <a>Update available: v" latest " - download</a>"
+    if MsgBox("A new version of SkillSnap is available!`n`n"
+            . "You have:  v" Version "`nNewest:    v" latest "`n`n"
+            . "Open the download page?", "SkillSnap update", "YesNo Iconi Owner" G.Hwnd) = "Yes"
+        Run RepoUrl "/releases/latest"
+}
+
+; Returns >0 if a is newer than b, <0 if older, 0 if equal ("1.2.0" style).
+CompareVersions(a, b) {
+    pa := StrSplit(a, "."), pb := StrSplit(b, ".")
+    loop Max(pa.Length, pb.Length) {
+        x := A_Index <= pa.Length ? Integer(pa[A_Index]) : 0
+        y := A_Index <= pb.Length ? Integer(pb[A_Index]) : 0
+        if (x != y)
+            return x - y
+    }
+    return 0
+}
+
 ; ---------- menu logic ----------
 ApplyDarkMode(g) {
     g.BackColor := "1E1F22"
@@ -147,6 +192,8 @@ ApplyDarkMode(g) {
             case "Text":
                 if (ctl != StatusTxt)
                     ctl.SetFont(ctl = NoteTxt ? "c8A8A8A" : "cE6E6E6")
+            case "Link":
+                ctl.SetFont("c8A8A8A")
         }
     }
 }
