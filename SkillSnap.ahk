@@ -42,9 +42,9 @@ StartBtn := G.AddButton("w260 h34", "Start")
 StartBtn.OnEvent("Click", ToggleBot)
 
 G.AddGroupBox("w260 h62 Section", "Toggle key")
-KeyBox := G.AddHotkey("xs+10 ys+24 w150", ToggleKey)
-SetBtn := G.AddButton("x+8 yp-1 w80", "Set")
-SetBtn.OnEvent("Click", ApplyKey)
+KeyBox := G.AddEdit("xs+10 ys+24 w120 ReadOnly Center", ToggleKey)
+SetBtn := G.AddButton("x+8 yp-1 w110", "Change key")
+SetBtn.OnEvent("Click", CaptureKey)
 
 
 G.AddGroupBox("xs w260 h96 Section", "Timing")
@@ -136,7 +136,7 @@ ApplyDarkMode(g) {
         switch ctl.Type, false {
             case "Button":
                 DllCall("uxtheme\SetWindowTheme", "Ptr", ctl.Hwnd, "Str", "DarkMode_Explorer", "Ptr", 0)
-            case "DDL":
+            case "DDL", "Edit":
                 DllCall("uxtheme\SetWindowTheme", "Ptr", ctl.Hwnd, "Str", "DarkMode_CFD", "Ptr", 0)
                 ctl.Opt("Background2B2D31")
                 ctl.SetFont("cE6E6E6")
@@ -164,9 +164,11 @@ SaveSettings() {
     IniWrite DarkCb.Value, IniFile, "Settings", "DarkMode"
 }
 
+; "*" = still fires while Shift/Ctrl/Alt are held (e.g. sprinting); it also uses
+; the keyboard hook, which works more reliably while a game has focus.
 RegisterKey(key) {
     try {
-        Hotkey key, ToggleBot, "On"
+        Hotkey "*" key, ToggleBot, "On"
         return true
     } catch {
         MsgBox "Can't use '" key "' as a hotkey.", "SkillSnap", "Icon!"
@@ -174,18 +176,27 @@ RegisterKey(key) {
     }
 }
 
-ApplyKey(*) {
+; Waits for the next key press and makes it the toggle key (Esc cancels).
+CaptureKey(*) {
     global ToggleKey
-    newKey := KeyBox.Value
-    if (newKey = "" || newKey = ToggleKey)
-        return
-    if !RegisterKey(newKey)
-        return
-    try Hotkey ToggleKey, "Off"
-    ToggleKey := newKey
-    SaveSettings()
-    ToolTip "Toggle key set to " ToggleKey
-    SetTimer () => ToolTip(), -1500
+    try Hotkey "*" ToggleKey, "Off"          ; so pressing the old key doesn't toggle the bot
+    SetBtn.Text := "Press a key..."
+    SetBtn.Enabled := false
+    KeyBox.Value := "..."
+    ih := InputHook("L0 T8")
+    ih.KeyOpt("{All}", "E")
+    ih.Start()
+    ih.Wait()
+    newKey := ih.EndKey
+    if (ih.EndReason = "EndKey" && newKey != "Escape" && RegisterKey(newKey)) {
+        ToggleKey := newKey
+        SaveSettings()
+    } else {
+        RegisterKey(ToggleKey)
+    }
+    KeyBox.Value := ToggleKey
+    SetBtn.Text := "Change key"
+    SetBtn.Enabled := true
 }
 
 ToggleBot(*) {
