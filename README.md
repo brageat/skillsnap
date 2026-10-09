@@ -1,17 +1,6 @@
-<p align="center">
-  <img src="assets/logo.svg" width="160" alt="SkillSnap logo">
-</p>
+# ⚡ SkillSnap
 
-<h1 align="center">SkillSnap</h1>
-
-<p align="center">
-  <b>Never miss an extraction skillcheck again.</b><br>
-  SkillSnap watches your screen and presses Space at exactly the right moment.
-</p>
-
-<p align="center">
-  <a href="https://github.com/brageat/skillsnap/releases/latest"><b>⬇️ Download</b></a>
-</p>
+**Never miss an extraction skillcheck again.** SkillSnap watches your screen and presses Space at exactly the right moment.
 
 - 🎯 **Handles both skillcheck types.** The **circle** (red ring shrinks onto yellow) and the default **bar** (red marker slides into the yellow zone).
 - 🧠 **Adapts to any speed.** It measures how fast each check moves and presses ahead of time, so slow and fast checks both hit.
