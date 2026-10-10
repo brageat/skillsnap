@@ -28,11 +28,6 @@
 2. Press **F6** (or click **Start**). The HUD shows **● BOT ON**.
 3. Start an extraction and let SkillSnap handle the skillchecks.
 
-### Tuning
-The **"Press X ms ahead"** slider makes up for your PC's input lag. The default is 45 ms.
-- Presses land **too early**: lower the number.
-- Presses land **too late**: raise the number.
-
 Works at any screen resolution.
 
 ## Disclaimer
