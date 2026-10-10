@@ -4,7 +4,7 @@
 ; finds the yellow ring on screen and presses Space
 ; right as the shrinking red ring reaches the yellow zone.
 
-Version  := "1.1.0"
+Version  := "1.1.1"
 RepoUrl  := "https://github.com/brageat/skillsnap"
 
 CoordMode "Pixel", "Screen"
