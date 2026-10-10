@@ -4,7 +4,7 @@
 ; finds the yellow ring on screen and presses Space
 ; right as the shrinking red ring reaches the yellow zone.
 
-Version  := "1.1.1"
+Version  := "1.1.2"
 RepoUrl  := "https://github.com/brageat/skillsnap"
 
 CoordMode "Pixel", "Screen"
@@ -49,17 +49,7 @@ KeyBox := G.AddEdit("xs+10 ys+24 w120 ReadOnly Center", ToggleKey)
 SetBtn := G.AddButton("x+8 yp-1 w110", "Change key")
 SetBtn.OnEvent("Click", CaptureKey)
 
-
-G.AddGroupBox("xs w260 h96 Section", "Timing")
-TimingTxt := G.AddText("xs+10 ys+22 w240", "")
-TimingSl := G.AddSlider("xs+10 y+4 w240 Range0-150 ToolTip", LatencyMs)
-G.SetFont("s8")
-G.AddText("xs+10 y+0 w120", "◄ later")
-G.AddText("x+0 w120 Right", "earlier ►")
-G.SetFont("s10")
-TimingSl.OnEvent("Change", (*) => (UpdateTimingText(), SaveSettings()))
-
-TopCb := G.AddCheckbox("xs Checked" OnTop, "Always on top")
+TopCb := G.AddCheckbox("xs ys+72 Checked" OnTop, "Always on top")
 TopCb.OnEvent("Click", (*) => (G.Opt((TopCb.Value ? "+" : "-") "AlwaysOnTop"), SaveSettings()))
 DarkCb := G.AddCheckbox("x+30 yp Checked" DarkMode, "Dark mode")
 DarkCb.OnEvent("Click", (*) => (SaveSettings(), Reload()))
@@ -83,7 +73,6 @@ if OnTop
     G.Opt("+AlwaysOnTop")
 if DarkMode
     ApplyDarkMode(G)
-UpdateTimingText()
 RegisterKey(ToggleKey)
 G.Show()
 
@@ -197,13 +186,8 @@ ApplyDarkMode(g) {
     }
 }
 
-UpdateTimingText() {
-    TimingTxt.Value := "Press " TimingSl.Value " ms ahead (default 45)"
-}
-
 SaveSettings() {
     IniWrite ToggleKey, IniFile, "Settings", "ToggleKey"
-    IniWrite TimingSl.Value, IniFile, "Settings", "LatencyMs"
     IniWrite TopCb.Value, IniFile, "Settings", "OnTop"
     IniWrite HudCb.Value, IniFile, "Settings", "ShowHud"
     IniWrite HudDd.Text, IniFile, "Settings", "HudPos"
@@ -309,7 +293,7 @@ DoRing(cx, cy, r) {
                 speed := speed ? speed * 0.4 + v * 0.6 : v
             prevT := t, prevR := rr
         }
-        if (rr <= target || (speed > 0 && (rr - target) / speed <= TimingSl.Value)) {
+        if (rr <= target || (speed > 0 && (rr - target) / speed <= LatencyMs)) {
             Press()
             pressed := true
             break
@@ -348,7 +332,7 @@ DoBar(zl, zr, row) {
                 speed := speed ? speed * 0.4 + v * 0.6 : v
             prevT := t, prevX := mc
         }
-        if (mc >= target || (speed > 0 && (target - mc) / speed <= TimingSl.Value)) {
+        if (mc >= target || (speed > 0 && (target - mc) / speed <= LatencyMs)) {
             Press()
             pressed := true
             break
