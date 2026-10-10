@@ -7,7 +7,7 @@
 
 - 🎯 **Handles both skillcheck types.** The **circle** (red ring shrinks onto yellow) and the default **bar** (red marker slides into the yellow zone).
 - 🧠 **Adapts to any speed.** It measures how fast each check moves and presses ahead of time, so slow and fast checks both hit.
-- 📊 **Mini stats HUD.** A click-through overlay with presses, skillchecks, misses, speed and run time.
+- 📊 **Mini stats HUD.** A click-through overlay with presses, skillchecks, speed and run time.
 - ⌨️ **Any toggle key.** Pick your own key; F6 by default.
 - 🌙 **Dark mode** and a clean settings menu. Your settings are saved.
 - 🖱️ **Keyboard only.** It never moves your mouse.
