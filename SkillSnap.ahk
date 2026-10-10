@@ -29,7 +29,7 @@ DarkMode     := IniRead(IniFile, "Settings", "DarkMode", 1) = 1
 
 global Active := false
 ; stats
-global Clicks := 0, Seen := 0, Missed := 0, LastSpeed := 0, ActiveMs := 0, ActiveSince := 0
+global Clicks := 0, Seen := 0, LastSpeed := 0, ActiveMs := 0, ActiveSince := 0
 BaseSpeed := 0.24 / 2160                 ; normal ring speed (fraction of screen height per ms)
 BarBaseSpeed := 0.58 / 2160              ; normal bar marker speed
 
@@ -94,7 +94,7 @@ Hud.MarginX := 10, Hud.MarginY := 8
 Hud.SetFont("s10 bold cRed", "Consolas")
 HudStatus := Hud.AddText("w200", "● BOT OFF")
 Hud.SetFont("s9 norm cE6E6E6")
-HudBody := Hud.AddText("w200 r5", "")
+HudBody := Hud.AddText("w200 r4", "")
 WinSetTransparent 215, Hud
 UpdateHud()
 PlaceHud()
@@ -120,13 +120,12 @@ UpdateHud() {
     secs := (ActiveMs + (Active ? A_TickCount - ActiveSince : 0)) // 1000
     HudBody.Value := "Presses:      " Clicks "`n"
                    . "Skillchecks:  " Seen "`n"
-                   . "Missed:       " Missed "`n"
                    . "Speed:        " (LastSpeed ? Format("{:.1f}x", LastSpeed) : "-") "`n"
                    . "Run time:     " Format("{:02}:{:02}", secs // 60, Mod(secs, 60))
 }
 
 ResetStats(*) {
-    global Clicks := 0, Seen := 0, Missed := 0, LastSpeed := 0, ActiveMs := 0
+    global Clicks := 0, Seen := 0, LastSpeed := 0, ActiveMs := 0
     global ActiveSince := A_TickCount
     UpdateHud()
 }
@@ -273,14 +272,12 @@ Scan() {
 
 ; Records the result of one skillcheck in the HUD stats.
 CountCheck(pressed, speed, baseSpeed) {
-    global Clicks, Seen, Missed, LastSpeed
+    global Clicks, Seen, LastSpeed
     Seen++
     if pressed {
         Clicks++
         if speed
             LastSpeed := speed / (A_ScreenHeight * baseSpeed)
-    } else if Active {
-        Missed++
     }
     UpdateHud()
 }
